@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trashsure/User.dart';
 import 'package:trashsure/buy_request.dart';
+import 'package:trashsure/pickup_page.dart';
 import 'package:trashsure/profile.dart';
 import 'package:trashsure/sell_request.dart';
 import 'package:trashsure/settings.dart';
@@ -109,6 +110,26 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
+          },
+        ),
+        ListTile(
+          title: Row(
+            children: const [
+              Icon(Icons.delivery_dining_rounded),
+              SizedBox(
+                width: 24,
+              ),
+              Text(
+                'Pickups',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              )
+            ],
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const PickUpPage()),
             );
           },
         ),
