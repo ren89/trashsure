@@ -49,6 +49,7 @@ dependencies:
   time_range_picker: ^2.2.0
   permission_handler: ^10.3.0
   geo_firestore_flutter: ^0.1.6
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

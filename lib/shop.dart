@@ -561,7 +561,6 @@ class _PinLocationModalState extends State<PinLocationModal> {
                     ),
                   ])),
             ),
-            SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context, _selectedLocation);

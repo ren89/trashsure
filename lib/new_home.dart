@@ -14,6 +14,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:trashsure/my_header_drawer.dart';
+import 'package:trashsure/sellRequestComponents/locationPicker.dart';
+import 'package:intl/intl.dart';
 
 import 'main_test.dart';
 
@@ -362,14 +364,14 @@ class _MapComponent extends State<MapComponent> {
   }
 
   Future<bool?> requestLocationPermission() async {
-    var permission_status = await Permission.location.request();
-    if (permission_status.isGranted) {
+    var permissionStatus = await Permission.location.request();
+    if (permissionStatus.isGranted) {
       var position = await Geolocator.getCurrentPosition();
       var docs = await getNearbyJunkshops(position);
-      var new_markers = await nearbyJunkshopsAsMarkers(docs);
+      var newMarkers = await nearbyJunkshopsAsMarkers(docs);
       setState(() {
         location = LatLng(position.latitude, position.longitude);
-        markers = new_markers;
+        markers = newMarkers;
       });
       return true;
     } else {
@@ -524,13 +526,13 @@ class _JunkshopWidgetState extends State<JunkshopWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var opening_hour = int.parse((data!['opening'] as String).split(':')[0]);
-    var closing_hour = int.parse((data!['closing'] as String).split(':')[0]);
-    var opening_min = int.parse((data!['opening'] as String).split(':')[1]);
-    var closing_min = int.parse((data!['closing'] as String).split(':')[1]);
+    var openingHour = int.parse((data!['opening'] as String).split(':')[0]);
+    var closingHour = int.parse((data!['closing'] as String).split(':')[0]);
+    var openingMin = int.parse((data!['opening'] as String).split(':')[1]);
+    var closingMin = int.parse((data!['closing'] as String).split(':')[1]);
     DateTime currentTime = DateTime.now();
-    TimeOfDay startTime = TimeOfDay(hour: opening_hour, minute: opening_min);
-    TimeOfDay endTime = TimeOfDay(hour: closing_hour, minute: closing_min);
+    TimeOfDay startTime = TimeOfDay(hour: openingHour, minute: openingMin);
+    TimeOfDay endTime = TimeOfDay(hour: closingHour, minute: closingMin);
 
     DateTime currentDateTime = DateTime(
       currentTime.year,
@@ -609,7 +611,7 @@ class _JunkshopWidgetState extends State<JunkshopWidget> {
                         width: 16,
                       ),
                       Text(
-                        "${opening_hour}:${(data!['opening'] as String).split(':')[1]} to ${closing_hour}:${(data!['closing'] as String).split(':')[1]}",
+                        "${openingHour}:${(data!['opening'] as String).split(':')[1]} to ${closingHour}:${(data!['closing'] as String).split(':')[1]}",
                         style: TextStyle(fontSize: 20),
                       ),
                     ],
@@ -648,7 +650,7 @@ class _JunkshopWidgetState extends State<JunkshopWidget> {
                       child: GestureDetector(
                         onTap: () async {
                           try {
-                            Item item_to_add = await showModalBottomSheet(
+                            Item itemToAdd = await showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
                                   return ItemQuantitySelector(
@@ -656,10 +658,10 @@ class _JunkshopWidgetState extends State<JunkshopWidget> {
                                       price: double.parse(
                                           item!['price'].toString()));
                                 });
-                            var new_cart = cart;
-                            new_cart.add(item_to_add);
+                            var newCart = cart;
+                            newCart.add(itemToAdd);
                             setState(() {
-                              cart = new_cart;
+                              cart = newCart;
                             });
                           } catch (e) {
                             log(e.toString());
@@ -874,11 +876,15 @@ class SellRequests extends StatefulWidget {
 
 class _SellRequestsState extends State<SellRequests> {
   XFile? pickedFile;
-  DateTime? date;
-
+  DateTime? startDate;
+  DateTime? endDate;
+  LatLng? pin;
+  String? startDateString;
+  String? endDateString;
   double calculateFare(double distance) {
     const double initialRate = 30.0; // Fare for the first 5 kilometers
-    const double additionalRate = 2.0; // Fare per kilometer after the first 5 kilometers
+    const double additionalRate =
+        2.0; // Fare per kilometer after the first 5 kilometers
 
     double fare = 0.0;
 
@@ -904,7 +910,7 @@ class _SellRequestsState extends State<SellRequests> {
     return Container(
       height: pickedFile != null
           ? MediaQuery.of(context).size.height * 0.9
-          : MediaQuery.of(context).size.height * 0.5,
+          : MediaQuery.of(context).size.height * 0.6,
       child: Padding(
         padding: EdgeInsets.all(12),
         child: Column(children: [
@@ -1010,61 +1016,89 @@ class _SellRequestsState extends State<SellRequests> {
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              "Select a date for pick up:",
+              "Select a range date for pick up:",
             ),
           ),
-          if (date == null) ...[
-            ElevatedButton(
-              child: Text("Select a date"),
-              onPressed: () async {
-                final DateTime? datePicked = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2024));
-                if (datePicked != null) {
-                  setState(() {
-                    date = datePicked;
-                  });
-                }
-              },
-            )
-          ] else ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(
-                  "${date?.month}/${date?.day}/${date?.year}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                ElevatedButton(
-                  child: Text("Replace date"),
-                  onPressed: () async {
+          if (startDate != null) Text(startDateString!),
+          ElevatedButton(
+            child: const Text("Select start date"),
+            onPressed: () async {
+              final DateTime? datePicked = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime.now(),
+                  lastDate: DateTime(2024));
+              if (datePicked != null) {
+                setState(() {
+                  startDate = datePicked;
+                  startDateString = DateFormat('MMM d yyyy').format(startDate!);
+                });
+              }
+            },
+          ),
+          if (endDate != null) Text(endDateString!),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: startDate != null
+                  ? Colors.blue
+                  : Colors.grey, // Set the desired background color
+            ),
+            child: const Text("Select end date"),
+            onPressed: startDate != null
+                ? () async {
                     final DateTime? datePicked = await showDatePicker(
                         context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime(2024));
+                        initialDate: startDate!,
+                        firstDate: startDate!,
+                        lastDate: startDate!.add(const Duration(days: 7)));
                     if (datePicked != null) {
                       setState(() {
-                        date = datePicked;
+                        endDate = datePicked;
+                        endDateString =
+                            DateFormat('MMM d yyyy').format(endDate!);
                       });
                     }
-                  },
-                )
-              ],
-            )
-          ],
+                  }
+                : null,
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Set pick up location:",
+            ),
+          ),
+          if (pin != null) Text(pin.toString()),
+          ElevatedButton(
+              onPressed: () async {
+                LatLng temp = await showModalBottomSheet(
+                    context: context,
+                    enableDrag: false,
+                    builder: (builder) {
+                      return const PickLocation();
+                    });
+                setState(() {
+                  pin = temp;
+                });
+                print("object");
+                print(pin);
+              },
+              child: const Text("Select location")),
           Row(
             children: [
               Expanded(
                   child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: (pickedFile != null && date != null)
+                    primary: (pickedFile != null &&
+                            startDate != null &&
+                            endDate != null &&
+                            pin != null)
                         ? Colors.blue
                         : Colors.grey),
                 onPressed: () async {
-                  if (pickedFile != null && date != null) {
+                  if (pickedFile != null &&
+                      startDate != null &&
+                      endDate != null &&
+                      pin != null) {
                     List<Map<String, dynamic>> items = [];
                     widget.items.forEach((element) {
                       items.add({
@@ -1081,12 +1115,11 @@ class _SellRequestsState extends State<SellRequests> {
                       "timestamp": DateTime.now(),
                       "owner": FirebaseAuth.instance.currentUser!.uid,
                       "junkshop_id": widget.junkshop_id,
-                      "pickup_date": date,
-                      "confirmed": false,
-                      "complete": false,
-                      "cancelled": false,
+                      "pickup_date": [startDate, endDate],
+                      "status": "PENDING",
                       "fare": calculateFare(widget.fare),
                       "total": calculateTotal(calculateFare(widget.fare)),
+                      "pickup_location": [pin?.latitude, pin?.longitude],
                     }).then((value) async {
                       await FirebaseStorage.instance
                           .ref(value.id)

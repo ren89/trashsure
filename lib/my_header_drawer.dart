@@ -57,7 +57,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                   ),
                 ),
                 Text(
-                  userData.user!.displayName!,
+                  userData.user!.displayName ?? "",
                   style: TextStyle(color: Colors.white, fontSize: 20),
                 ),
                 Text(
