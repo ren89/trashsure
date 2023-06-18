@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trashsure/my_header_drawer.dart';
 import 'package:trashsure/my_marketplace.dart';
+import 'package:intl/intl.dart';
 
 import 'main_test.dart';
 
@@ -13,6 +14,7 @@ class JunkshopHome extends StatefulWidget {
 }
 
 class _JunkshopHomeState extends State<JunkshopHome> {
+  DateTime? pickedDate;
   Future<List<DocumentSnapshot>> getRequests() async {
     var junkshops = await FirebaseFirestore.instance
         .collection("junkshops")
@@ -81,7 +83,10 @@ class _JunkshopHomeState extends State<JunkshopHome> {
                                     }).toList(),
                                     Text(
                                         textAlign: TextAlign.start,
-                                        "Pickup date: ${DateTime.fromMicrosecondsSinceEpoch(((e.data() as Map)['pickup_date'] as Timestamp).microsecondsSinceEpoch).toString().split(" ")[0]}")
+                                        "Pickup date range:"),
+                                    Text(
+                                        textAlign: TextAlign.start,
+                                        "${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][0].toDate())} - ${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][1].toDate())}")
                                   ]),
                               Expanded(child: SizedBox.shrink()),
                               Text(
@@ -115,12 +120,31 @@ class _JunkshopHomeState extends State<JunkshopHome> {
                                         children: [
                                           Expanded(
                                               child: ElevatedButton(
-                                                  onPressed: () {
-                                                    e.reference.update({
-                                                      "confirmed": true
-                                                    }).then((value) {
-                                                      Navigator.pop(context);
-                                                    });
+                                                  onPressed: () async {
+                                                    pickedDate = await showDatePicker(
+                                                        context: context,
+                                                        initialDate: (e.data()
+                                                                        as Map)[
+                                                                    'pickup_date']
+                                                                [0]
+                                                            .toDate(),
+                                                        firstDate: (e.data()
+                                                                        as Map)[
+                                                                    'pickup_date']
+                                                                [0]
+                                                            .toDate(),
+                                                        lastDate: (e.data() as Map)[
+                                                                'pickup_date'][1]
+                                                            .toDate());
+                                                    if (pickedDate != null) {
+                                                      e.reference.update({
+                                                        "status": "ACCEPTED",
+                                                        "picked_date":
+                                                            pickedDate,
+                                                      }).then((value) {
+                                                        Navigator.pop(context);
+                                                      });
+                                                    }
                                                   },
                                                   child: Text("Yes"))),
                                           Expanded(child: SizedBox.shrink()),
@@ -135,7 +159,7 @@ class _JunkshopHomeState extends State<JunkshopHome> {
                                               child: ElevatedButton(
                                                   onPressed: () {
                                                     e.reference.update({
-                                                      "cancelled": true
+                                                      "status": "CANCELLED"
                                                     }).then((value) {
                                                       Navigator.pop(context);
                                                     });
