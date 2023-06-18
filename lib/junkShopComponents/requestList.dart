@@ -163,12 +163,22 @@ class _RequestListState extends State<RequestList> {
                                   return Text(
                                       '${item['quantity']}kg ${item['name']} @ P${item['price']}/kg');
                                 }).toList(),
-                                const Text(
-                                    textAlign: TextAlign.start,
-                                    "Pickup date range:"),
-                                Text(
-                                    textAlign: TextAlign.start,
-                                    "${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][0].toDate())} - ${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][1].toDate())}")
+                                (e.data() as Map)['status'] == "ACCEPTED"
+                                    ? const Text(
+                                        textAlign: TextAlign.start,
+                                        "Picked date:")
+                                    : const Text(
+                                        textAlign: TextAlign.start,
+                                        "Pickup date range:"),
+                                (e.data() as Map)['status'] == "ACCEPTED"
+                                    ? Text(
+                                        textAlign: TextAlign.start,
+                                        DateFormat('MMM d ').format(
+                                            (e.data() as Map)['picked_date']
+                                                .toDate()))
+                                    : Text(
+                                        textAlign: TextAlign.start,
+                                        "${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][0].toDate())} - ${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][1].toDate())}")
                               ],
                             ),
                             const Expanded(child: SizedBox.shrink()),

@@ -5,6 +5,7 @@ import 'package:trashsure/my_header_drawer.dart';
 class JunkshopHome extends StatefulWidget {
   const JunkshopHome({super.key});
 
+  @override
   State<JunkshopHome> createState() => _JunkshopHomeState();
 }
 
