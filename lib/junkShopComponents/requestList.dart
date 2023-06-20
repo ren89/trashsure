@@ -31,7 +31,6 @@ class _RequestListState extends State<RequestList> {
         }
       }
     }
-
     return requests;
   }
 
@@ -78,71 +77,57 @@ class _RequestListState extends State<RequestList> {
                                                 fontSize: 24,
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          Row(
+                                          Column(
                                             children: [
-                                              Expanded(
-                                                  child: ElevatedButton(
-                                                      onPressed: () async {
-                                                        pickedDate = await showDatePicker(
-                                                            context: context,
-                                                            initialDate:
-                                                                (e.data() as Map)[
-                                                                            'pickup_date']
-                                                                        [0]
-                                                                    .toDate(),
-                                                            firstDate:
-                                                                (e.data() as Map)[
-                                                                            'pickup_date']
-                                                                        [0]
-                                                                    .toDate(),
-                                                            lastDate: (e.data()
+                                              ElevatedButton(
+                                                  onPressed: () async {
+                                                    pickedDate = await showDatePicker(
+                                                        context: context,
+                                                        initialDate: (e.data()
                                                                         as Map)[
-                                                                    'pickup_date'][1]
-                                                                .toDate());
-                                                        if (pickedDate !=
-                                                            null) {
-                                                          e.reference.update({
-                                                            "status":
-                                                                "ACCEPTED",
-                                                            "picked_date":
-                                                                pickedDate,
-                                                          }).then((value) {
-                                                            Navigator.pop(
-                                                                context);
-
-                                                            setState(() {
-                                                              getRequests();
-                                                            });
-                                                          });
-                                                        }
-                                                      },
-                                                      child:
-                                                          const Text("Yes"))),
-                                              const Expanded(
-                                                  child: SizedBox.shrink()),
-                                              Expanded(
-                                                  child: ElevatedButton(
-                                                      onPressed: () {
+                                                                    'pickup_date']
+                                                                [0]
+                                                            .toDate(),
+                                                        firstDate: (e.data()
+                                                                        as Map)[
+                                                                    'pickup_date']
+                                                                [0]
+                                                            .toDate(),
+                                                        lastDate: (e.data() as Map)[
+                                                                'pickup_date'][1]
+                                                            .toDate());
+                                                    if (pickedDate != null) {
+                                                      e.reference.update({
+                                                        "status": "ACCEPTED",
+                                                        "picked_date":
+                                                            pickedDate,
+                                                      }).then((value) {
                                                         Navigator.pop(context);
-                                                      },
-                                                      child: Text("No"))),
-                                              const Expanded(
-                                                  child: SizedBox.shrink()),
-                                              Expanded(
-                                                  child: ElevatedButton(
-                                                      onPressed: () {
-                                                        e.reference.update({
-                                                          "status": "CANCELLED"
-                                                        }).then((value) {
-                                                          Navigator.pop(
-                                                              context);
-                                                          setState(() {
-                                                            getRequests();
-                                                          });
+
+                                                        setState(() {
+                                                          getRequests();
                                                         });
-                                                      },
-                                                      child:
-                                                          const Text("Cancel")))
+                                                      });
+                                                    }
+                                                  },
+                                                  child: const Text("Yes")),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text("No")),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    e.reference.update({
+                                                      "status": "CANCELLED"
+                                                    }).then((value) {
+                                                      Navigator.pop(context);
+                                                      setState(() {
+                                                        getRequests();
+                                                      });
+                                                    });
+                                                  },
+                                                  child: const Text("Cancel"))
                                             ],
                                           )
                                         ]),
@@ -178,7 +163,9 @@ class _RequestListState extends State<RequestList> {
                                                 .toDate()))
                                     : Text(
                                         textAlign: TextAlign.start,
-                                        "${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][0].toDate())} - ${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][1].toDate())}")
+                                        "${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][0].toDate())} - ${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][1].toDate())}"),
+                                Text(
+                                    "${(e.data() as Map)['phone'] ?? ''}"),
                               ],
                             ),
                             const Expanded(child: SizedBox.shrink()),

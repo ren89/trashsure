@@ -92,20 +92,20 @@ class _SellRequestCardState extends State<SellRequestCard> {
 
   @override
   void initState() {
-    FirebaseStorage.instance.ref(widget.data.id).getDownloadURL().then((value) {
-      setState(() {
-        url = value;
-        ready = true;
-      });
-    });
     super.initState();
+    FirebaseStorage.instance.ref(widget.data.id).getDownloadURL().then((value) {
+      print(value);
+      if (mounted) {
+        setState(() {
+          url = value;
+          ready = true;
+        });
+      }
+    });
   }
 
   String getStatus(Map data) {
     String status = "Pending";
-    if (data['confirmed']) status = "Confirmed";
-    if (data['complete']) status = "Complete";
-    if (data['cancelled']) status = "Cancelled";
     return status;
   }
 
@@ -121,7 +121,7 @@ class _SellRequestCardState extends State<SellRequestCard> {
           padding: EdgeInsets.all(16),
           child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: ready == true
+              children: ready
                   ? [
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -164,5 +164,3 @@ class _SellRequestCardState extends State<SellRequestCard> {
     );
   }
 }
-
-/*                          ,*/

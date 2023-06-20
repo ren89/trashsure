@@ -598,6 +598,11 @@ class _JunkshopWidgetState extends State<JunkshopWidget> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Text('${data!['phone'] ?? ""}',
+                      style: TextStyle(fontSize: 20)),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12),
                   child: Row(
                     children: [
                       Text(
@@ -905,6 +910,21 @@ class _SellRequestsState extends State<SellRequests> {
     return total - fare;
   }
 
+  Future<dynamic> getUserById(String userId) async {
+    CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+
+    DocumentSnapshot userDoc = await usersCollection.doc(userId).get();
+    return userDoc.data();
+  }
+
+  Future<String> getNumber(String userId) async {
+    dynamic user = await getUserById(userId);
+    print("test");
+    print(user!['phone']);
+    return user!['phone'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1079,8 +1099,6 @@ class _SellRequestsState extends State<SellRequests> {
                 setState(() {
                   pin = temp;
                 });
-                print("object");
-                print(pin);
               },
               child: const Text("Select location")),
           Row(
@@ -1120,6 +1138,8 @@ class _SellRequestsState extends State<SellRequests> {
                       "fare": calculateFare(widget.fare),
                       "total": calculateTotal(calculateFare(widget.fare)),
                       "pickup_location": [pin?.latitude, pin?.longitude],
+                      "phone": await getNumber(
+                          FirebaseAuth.instance.currentUser!.uid),
                     }).then((value) async {
                       await FirebaseStorage.instance
                           .ref(value.id)

@@ -50,6 +50,7 @@ dependencies:
   permission_handler: ^10.3.0
   geo_firestore_flutter: ^0.1.6
   intl: ^0.18.1
+  flutter_polyline_points: ^1.0.0
 
 dev_dependencies:
   flutter_test:

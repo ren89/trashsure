@@ -22,23 +22,12 @@ class _RegisterPageState extends State<RegisterPage> {
   final _confirmaddressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
-  @override
-  void dispose() {
-    _firstNameController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _confirmpasswordController.dispose();
-    _confirmphoneNumberController.dispose();
-    _confirmaddressController.dispose();
-    super.dispose();
-  }
-
   bool isRememberMe = false;
 
   Future signUp() async {
     bool errors = false;
     bool email_verified = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(_emailController.text);
     String pattern =
         r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
@@ -51,18 +40,18 @@ class _RegisterPageState extends State<RegisterPage> {
     } else if (passwordConfirmed() && errors == false) {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim())
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim())
           .then((value) => {
-        FirebaseFirestore.instance
-            .collection("users")
-            .doc(value.user?.uid)
-            .set({
-          "address": _confirmaddressController.text,
-          "name": _firstNameController.text,
-          "phone": _confirmphoneNumberController.text
-        }).then((value) => Navigator.pop(context))
-      });
+                FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(value.user?.uid)
+                    .set({
+                  "address": _confirmaddressController.text,
+                  "name": _firstNameController.text,
+                  "phone": _confirmphoneNumberController.text
+                }).then((value) => Navigator.pop(context))
+              });
     } else if (errors == true && passwordConfirmed() == false) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
@@ -180,7 +169,7 @@ class _RegisterPageState extends State<RegisterPage> {
           return null;
         },
         controller: _passwordController,
-        obscureText: false,
+        obscureText: true,
         style: TextStyle(color: Colors.black87),
         decoration: InputDecoration(
             errorMaxLines: 4,
@@ -212,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
           return 'Does not match your password.';
         },
         controller: _confirmpasswordController,
-        obscureText: false,
+        obscureText: true,
         style: TextStyle(color: Colors.black87),
         decoration: InputDecoration(
             border: InputBorder.none,
@@ -345,11 +334,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Color(0x66efd7d7),
-                        Color(0x99efd7d7),
-                        Color(0xccefd7d7),
-                        Color(0xffefd7d7),
-                      ])),
+                    Color(0x66efd7d7),
+                    Color(0x99efd7d7),
+                    Color(0xccefd7d7),
+                    Color(0xffefd7d7),
+                  ])),
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 padding: EdgeInsets.symmetric(horizontal: 25, vertical: 120),

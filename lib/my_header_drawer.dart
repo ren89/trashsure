@@ -20,9 +20,11 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
   final user = FirebaseAuth.instance.currentUser!;
   dynamic? userDoc;
   final userData = UserSingleton.instance;
+  bool role = false;
 
   @override
   void initState() {
+    getRole(FirebaseAuth.instance.currentUser!.uid);
     FirebaseFirestore.instance
         .collection("users")
         .doc(FirebaseAuth.instance.currentUser?.uid)
@@ -32,6 +34,23 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
         userDoc = value.data();
       });
     });
+  }
+
+  Future<dynamic> getUserById(String userId) async {
+    CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+
+    DocumentSnapshot userDoc = await usersCollection.doc(userId).get();
+    return userDoc.data();
+  }
+
+  Future<bool> getRole(String userId) async {
+    dynamic user = await getUserById(userId);
+    print(user!['junkshop_owner']);
+    setState(() {
+      role = user!['junkshop_owner'] ?? false;
+    });
+    return user!['junkshop_owner'] ?? false;
   }
 
   @override
@@ -113,94 +132,104 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
             );
           },
         ),
-        ListTile(
-          title: Row(
-            children: const [
-              Icon(Icons.delivery_dining_rounded),
-              SizedBox(
-                width: 24,
-              ),
-              Text(
-                'Pickups',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )
-            ],
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const PickUpPage()),
-            );
-          },
-        ),
-        if (userData.userType == "junkshop_owner")
-          ListTile(
-            title: Row(
-              children: [
-                Icon(Icons.attach_money_outlined),
-                SizedBox(
-                  width: 24,
+        !role
+            ? SizedBox()
+            : ListTile(
+                title: Row(
+                  children: const [
+                    Icon(Icons.delivery_dining_rounded),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    Text(
+                      'Pickups',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )
+                  ],
                 ),
-                Text(
-                  'Buy Request and History',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                )
-              ],
-            ),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BuyRequest()),
-              );
-            },
-          ),
-        ListTile(
-          title: Row(
-            children: [
-              Icon(Icons.attach_money_outlined),
-              SizedBox(
-                width: 24,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PickUpPage()),
+                  );
+                },
               ),
-              Text(
-                'Sell Request and History',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-              )
-            ],
-          ),
-          onTap: () {
-            // Update the state of the app.
-            // ...
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SellRequest()),
-            );
-          },
-        ),
-        if (userData.userType == "junkshop_owner")
-          ListTile(
-            title: Row(
-              children: [
-                Icon(Icons.attach_money_outlined),
-                SizedBox(
-                  width: 24,
+        !role
+            ? SizedBox()
+            : ListTile(
+                title: Row(
+                  children: [
+                    Icon(Icons.attach_money_outlined),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    Text(
+                      'Buy Request and History',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )
+                  ],
                 ),
-                Text(
-                  'My Shops',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                )
-              ],
-            ),
-            onTap: () {
-              // Update the state of the app.
-              // ...
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyStore()),
-              );
-            },
-          ),
+                onTap: () {
+                  // Update the state of the app.
+                  // ...
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BuyRequest()),
+                  );
+                },
+              ),
+        role
+            ? SizedBox()
+            : ListTile(
+                title: Row(
+                  children: [
+                    Icon(Icons.attach_money_outlined),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    Text(
+                      'Sell Request and History',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )
+                  ],
+                ),
+                onTap: () {
+                  // Update the state of the app.
+                  // ...
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SellRequest()),
+                  );
+                },
+              ),
+        !role
+            ? SizedBox()
+            : ListTile(
+                title: Row(
+                  children: [
+                    Icon(Icons.attach_money_outlined),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    Text(
+                      'My Shops',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )
+                  ],
+                ),
+                onTap: () {
+                  // Update the state of the app.
+                  // ...
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyStore()),
+                  );
+                },
+              ),
         ListTile(
           title: Row(
             children: [
