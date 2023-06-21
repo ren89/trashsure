@@ -53,7 +53,7 @@ class _NearestJunkShopState extends State<NearestJunkShop> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? const CircularProgressIndicator()
+        ? const Center(child: CircularProgressIndicator())
         : Expanded(
             child: ListView.builder(
               itemCount: docs.length,

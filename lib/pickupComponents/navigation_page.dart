@@ -78,7 +78,7 @@ class _NavigationPageState extends State<NavigationPage> {
         backgroundColor: Colors.green[700],
       ),
       body: isLoading
-          ? null
+          ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 MapScreen(

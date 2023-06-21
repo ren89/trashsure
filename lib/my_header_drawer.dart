@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trashsure/User.dart';
 import 'package:trashsure/buy_request.dart';
+import 'package:trashsure/market_place.dart';
 import 'package:trashsure/pickup_page.dart';
 import 'package:trashsure/profile.dart';
 import 'package:trashsure/sell_request.dart';
@@ -46,7 +47,6 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
 
   Future<bool> getRole(String userId) async {
     dynamic user = await getUserById(userId);
-    print(user!['junkshop_owner']);
     setState(() {
       role = user!['junkshop_owner'] ?? false;
     });
@@ -112,7 +112,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
         ),
         ListTile(
           title: Row(
-            children: [
+            children: const [
               Icon(Icons.account_box_outlined),
               SizedBox(
                 width: 24,
@@ -132,8 +132,28 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
             );
           },
         ),
+        ListTile(
+          title: Row(
+            children: const [
+              Icon(Icons.storefront),
+              SizedBox(
+                width: 24,
+              ),
+              Text(
+                'Market Place',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              )
+            ],
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MarketPlacePage()),
+            );
+          },
+        ),
         !role
-            ? SizedBox()
+            ? const SizedBox()
             : ListTile(
                 title: Row(
                   children: const [
@@ -159,7 +179,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
             ? SizedBox()
             : ListTile(
                 title: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.attach_money_outlined),
                     SizedBox(
                       width: 24,
@@ -209,7 +229,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
             ? SizedBox()
             : ListTile(
                 title: Row(
-                  children: [
+                  children: const [
                     Icon(Icons.attach_money_outlined),
                     SizedBox(
                       width: 24,
@@ -232,7 +252,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
               ),
         ListTile(
           title: Row(
-            children: [
+            children: const [
               Icon(Icons.close),
               SizedBox(
                 width: 24,

@@ -73,21 +73,10 @@ class BottomPopUpModal extends StatefulWidget {
 class _BottomPopUpModalState extends State<BottomPopUpModal> {
   List<XFile>? pickedImages;
   int? weight;
+  double? price;
   String? items, description;
   DateTime selectedDate = DateTime.now();
   TextEditingController _date = TextEditingController();
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2023),
-        lastDate: DateTime(2100));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        _date.value = TextEditingValue(text: picked.toString());
-      });
-  }
 
   Future<void> _uploadImages(String id) async {
     for (int i = 0; i < pickedImages!.length; i++) {
@@ -98,6 +87,24 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
 
       await storageReference.putFile(file);
     }
+  }
+
+  Future<dynamic> getUserById(String userId) async {
+    CollectionReference usersCollection =
+        FirebaseFirestore.instance.collection('users');
+
+    DocumentSnapshot userDoc = await usersCollection.doc(userId).get();
+    return userDoc.data();
+  }
+
+  Future<String> getNumber(String userId) async {
+    dynamic user = await getUserById(userId);
+    return user!['phone'];
+  }
+
+  Future<String> getAddress(String userId) async {
+    dynamic user = await getUserById(userId);
+    return user!['address'];
   }
 
   Widget build(BuildContext context) {
@@ -235,27 +242,24 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                   ),
                 )),
           ),
-          GestureDetector(
-            onTap: () {
-              _selectDate(context);
-            },
-            child: AbsorbPointer(
-                child: Card(
-              elevation: 4,
-              child: TextField(
-                  controller: _date,
-                  decoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.only(top: 16), // add padding to adjust text
-                    isDense: true,
-                    hintText: "Date",
-                    prefixIcon: Padding(
-                      padding:
-                          EdgeInsets.only(top: 4), // add padding to adjust icon
-                      child: Icon(Icons.date_range),
-                    ),
-                  )),
-            )),
+          Card(
+            elevation: 4,
+            child: TextField(
+                keyboardType: TextInputType.number,
+                onChanged: (value) {
+                  setState(() {
+                    price = double.parse(value);
+                  });
+                },
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.only(top: 16),
+                  isDense: true,
+                  hintText: "Price",
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.only(top: 4),
+                    child: Icon(Icons.sell_rounded),
+                  ),
+                )),
           ),
           Expanded(
             child: SizedBox(
@@ -285,18 +289,20 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
               ),
               MaterialButton(
                 onPressed: () async {
-                  if (items != null &&
-                      weight != null &&
-                      pickedImages != null &&
-                      selectedDate != null) {
+                  if (items != null && weight != null && pickedImages != null) {
                     FirebaseFirestore.instance.collection("marketplace").add({
                       "items": items,
                       "weight": weight,
                       "description": description,
-                      "date": selectedDate,
                       "owner_id": FirebaseAuth.instance.currentUser?.uid,
                       "buyer_id": null,
-                      "bought": false
+                      "bought": false,
+                      "phone": await getNumber(
+                          FirebaseAuth.instance.currentUser!.uid),
+                      "address": await getAddress(
+                          FirebaseAuth.instance.currentUser!.uid),
+                      "price": price,
+                      "seller_id": FirebaseAuth.instance.currentUser!.uid,
                     }).then((value) {
                       if (pickedImages != null && pickedImages!.isNotEmpty) {
                         _uploadImages(value.id)
