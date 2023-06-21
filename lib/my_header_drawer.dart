@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trashsure/User.dart';
 import 'package:trashsure/buy_request.dart';
+import 'package:trashsure/history_page.dart';
 import 'package:trashsure/market_place.dart';
 import 'package:trashsure/pickup_page.dart';
 import 'package:trashsure/profile.dart';
@@ -175,56 +176,26 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                   );
                 },
               ),
-        !role
-            ? SizedBox()
-            : ListTile(
-                title: Row(
-                  children: const [
-                    Icon(Icons.attach_money_outlined),
-                    SizedBox(
-                      width: 24,
-                    ),
-                    Text(
-                      'Buy Request and History',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    )
-                  ],
-                ),
-                onTap: () {
-                  // Update the state of the app.
-                  // ...
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => BuyRequest()),
-                  );
-                },
+        ListTile(
+          title: Row(
+            children: const [
+              Icon(Icons.history),
+              SizedBox(
+                width: 24,
               ),
-        role
-            ? SizedBox()
-            : ListTile(
-                title: Row(
-                  children: [
-                    Icon(Icons.attach_money_outlined),
-                    SizedBox(
-                      width: 24,
-                    ),
-                    Text(
-                      'Sell Request and History',
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    )
-                  ],
-                ),
-                onTap: () {
-                  // Update the state of the app.
-                  // ...
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SellRequest()),
-                  );
-                },
-              ),
+              Text(
+                'History',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              )
+            ],
+          ),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HistoryPage()),
+            );
+          },
+        ),
         !role
             ? SizedBox()
             : ListTile(
