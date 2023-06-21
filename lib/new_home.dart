@@ -1,14 +1,11 @@
 import 'dart:developer';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:geo_firestore_flutter/geo_firestore_flutter.dart';
-import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +13,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:trashsure/my_header_drawer.dart';
 import 'package:trashsure/sellRequestComponents/locationPicker.dart';
 import 'package:intl/intl.dart';
+import 'package:trashsure/sellerHomeComponents/nearestJunkShops.dart';
 
 import 'main_test.dart';
 
@@ -29,17 +27,14 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TopItemsAppBar(),
-      drawer: MyHeaderDrawer(),
+      drawer: const MyHeaderDrawer(),
       body: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Row(
-              children: [Expanded(child: MapComponent())],
-            ),
+          Row(
+            children: [Expanded(child: MapComponent())],
           ),
           Padding(
-            padding: EdgeInsets.all(16),
+            padding: const EdgeInsets.all(16),
             child: Row(
               children: [
                 Expanded(
@@ -50,10 +45,10 @@ class _HomeState extends State<Home> {
                         isScrollControlled: true,
                         context: context,
                         builder: (Builder) {
-                          return BottomPopUpModal();
+                          return const BottomPopUpModal();
                         });
                   },
-                  child: Text(
+                  child: const Text(
                     "Sell on Marketplace",
                     style: TextStyle(color: Colors.white),
                   ),
@@ -61,6 +56,7 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
+          const NearestJunkShop()
         ],
       ),
     );
