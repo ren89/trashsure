@@ -16,27 +16,30 @@ class _NearestJunkShopState extends State<NearestJunkShop> {
   bool isLoading = true;
   List<DocumentSnapshot> docs = [];
   late Position currentLocation;
+
   getNearbyJunkshops() async {
     var position = await Geolocator.getCurrentPosition();
+    setState(() {
+      currentLocation = position;
+    });
     GeoFirestore geo =
         GeoFirestore(FirebaseFirestore.instance.collection("junkshops"));
     var temp = await geo.getAtLocation(
         GeoPoint(position.latitude, position.longitude), 100);
-    for (var element in temp) {
-      print((element.data() as Map)['name']);
-    }
+
+    temp.sort((a, b) => getDistance((a.data() as Map)['l'])
+        .compareTo(getDistance((b.data() as Map)['l'])));
 
     setState(() {
       docs = temp;
-      currentLocation = position;
       isLoading = false;
     });
   }
 
   getDistance(List<dynamic> junkShop) {
-    print(junkShop[0]);
-    var distance =
-        "${(Geolocator.distanceBetween(currentLocation.latitude, currentLocation.longitude, junkShop[0], junkShop[1]) / 1000).toStringAsFixed(2)} km away";
+    var distance = (Geolocator.distanceBetween(currentLocation.latitude,
+            currentLocation.longitude, junkShop[0], junkShop[1]) /
+        1000);
 
     return distance;
   }

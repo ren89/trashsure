@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trashsure/new_home.dart';
 
@@ -8,7 +7,7 @@ class JunkShopCard extends StatefulWidget {
   final String openingTime;
   final String closingTime;
   final String contact;
-  final String distance;
+  final double distance;
   final String id;
   final LatLng location;
   const JunkShopCard({
@@ -52,7 +51,7 @@ class _JunkShopCardState extends State<JunkShopCard> {
               children: [
                 Text(
                     'Available Time: ${widget.openingTime}-${widget.closingTime}'),
-                Text('Distance: ${widget.distance}'),
+                Text('Distance: ${widget.distance.toStringAsFixed(2)} km away'),
                 Text('Phone Number: ${widget.contact}'),
               ],
             ),
