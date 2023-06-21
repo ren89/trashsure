@@ -46,26 +46,34 @@ class _JunkShopCardState extends State<JunkShopCard> {
         child: Card(
           child: ListTile(
             title: Text(widget.name),
-            subtitle: Column(
+            subtitle: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                    'Available Time: ${widget.openingTime}-${widget.closingTime}'),
-                Text('Distance: ${widget.distance.toStringAsFixed(2)} km away'),
-                Text('Phone Number: ${widget.contact}'),
+                Padding(
+                  padding: EdgeInsets.only(top: 5, bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                          'Available Time: ${widget.openingTime}-${widget.closingTime}'),
+                      Text(
+                          'Distance: ${widget.distance.toStringAsFixed(2)} km'),
+                      Text('Phone Number: ${widget.contact}'),
+                    ],
+                  ),
+                ),
+                const Spacer(),
+                const Icon(
+                  Icons.store,
+                  size: 45,
+                  color: Colors.black,
+                )
               ],
             ),
           ),
         ),
       ),
     );
-    // Card(
-    //   child: Column(children: [
-    //     Text(widget.name),
-    //     Text(widget.contact),
-    //     Text('${widget.openingTime}-${widget.closingTime}'),
-    //     Text(widget.distance),
-    //   ]),
-    // );
   }
 }
