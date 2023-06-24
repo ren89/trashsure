@@ -75,7 +75,7 @@ class _NavigationPageState extends State<NavigationPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Navigation"),
-        backgroundColor: Colors.green[700],
+        backgroundColor: Color(0xff45b5a8),
       ),
       body: isLoading
           ? const Center(child: CircularProgressIndicator())

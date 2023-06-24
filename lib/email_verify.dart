@@ -24,7 +24,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: Text('Email Verification'),
-        backgroundColor: Colors.green[700],
+        backgroundColor: Color(0xff45b5a8),
       ),
       body: Center(
         child: Padding(
@@ -59,8 +59,8 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                     FirebaseAuth.instance.signOut().then((value) {
                       Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (context) {
-                            return (AuthPage());
-                          }));
+                        return (AuthPage());
+                      }));
                     });
                   },
                   child: Text("Sign out"))

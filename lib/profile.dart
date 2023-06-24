@@ -10,7 +10,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green[700],
+        backgroundColor: Color(0xff45b5a8),
         title: Text('Profile'),
       ),
       body: ListView(

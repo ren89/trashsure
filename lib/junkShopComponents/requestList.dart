@@ -42,6 +42,21 @@ class _RequestListState extends State<RequestList> {
     return total;
   }
 
+  writeNotification(DateTime pickedDate, String docId) async {
+    var doc = await FirebaseFirestore.instance
+        .collection('requests')
+        .doc(docId)
+        .get();
+
+    var sellerId = (doc.data() as Map)['owner'];
+    FirebaseFirestore.instance.collection("notification").add({
+      "user_id": sellerId,
+      "content":
+          'Your sell request have been accepted. Date of pick up would be in ${DateFormat('MMMM d').format(pickedDate)}',
+      "isRead": false
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -97,6 +112,8 @@ class _RequestListState extends State<RequestList> {
                                                                 'pickup_date'][1]
                                                             .toDate());
                                                     if (pickedDate != null) {
+                                                      writeNotification(
+                                                          pickedDate!, e.id);
                                                       e.reference.update({
                                                         "status": "ACCEPTED",
                                                         "picked_date":
@@ -164,8 +181,7 @@ class _RequestListState extends State<RequestList> {
                                     : Text(
                                         textAlign: TextAlign.start,
                                         "${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][0].toDate())} - ${DateFormat('MMM d ').format((e.data() as Map)['pickup_date'][1].toDate())}"),
-                                Text(
-                                    "${(e.data() as Map)['phone'] ?? ''}"),
+                                Text("${(e.data() as Map)['phone'] ?? ''}"),
                               ],
                             ),
                             const Expanded(child: SizedBox.shrink()),

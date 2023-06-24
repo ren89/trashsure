@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:trashsure/Auth_Page.dart';
+import 'package:trashsure/LoginScreen.dart';
 import 'package:trashsure/User.dart';
 import 'package:trashsure/buy_request.dart';
 import 'package:trashsure/history_page.dart';
@@ -60,7 +62,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
         child: ListView(
       children: [
         Container(
-          color: Colors.green[700],
+          color: Color(0xff45b5a8),
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 32),
@@ -224,7 +226,7 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
         ListTile(
           title: Row(
             children: const [
-              Icon(Icons.close),
+              Icon(Icons.logout),
               SizedBox(
                 width: 24,
               ),
@@ -236,6 +238,10 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
           ),
           onTap: () {
             FirebaseAuth.instance.signOut();
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AuthPage()),
+            );
           },
         ),
       ],

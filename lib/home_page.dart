@@ -82,9 +82,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green[700],
+        backgroundColor: Color(0xff45b5a8),
         systemOverlayStyle:
-            SystemUiOverlayStyle(statusBarColor: Colors.green[700]),
+            SystemUiOverlayStyle(statusBarColor: Color(0xff45b5a8)),
         title: Text("Trashsure"),
         centerTitle: true,
       ),

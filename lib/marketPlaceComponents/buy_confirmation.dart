@@ -40,7 +40,7 @@ class BuyItemModal extends StatelessWidget {
     FirebaseFirestore.instance.collection("notification").add({
       "user_id": sellerId,
       "content":
-          ' Your listing has been bought by ${await getName()}. Thank you for using Trashure',
+          'Your listing has been bought by ${await getName()}. Thank you for using Trashure',
       "isRead": false
     });
   }

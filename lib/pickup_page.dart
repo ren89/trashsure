@@ -52,7 +52,7 @@ class _PickUpPageState extends State<PickUpPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Pick up"),
-        backgroundColor: Colors.green[700],
+        backgroundColor: Color(0xff45b5a8),
       ),
       body: ListView.builder(
         itemCount: pickupDates.length,

@@ -51,7 +51,7 @@ class _JunkShopCardState extends State<JunkShopCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 5, bottom: 10),
+                  padding: const EdgeInsets.only(top: 5, bottom: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -67,7 +67,7 @@ class _JunkShopCardState extends State<JunkShopCard> {
                 const Icon(
                   Icons.store,
                   size: 45,
-                  color: Colors.black,
+                  color: Color(0xff45b5a8),
                 )
               ],
             ),

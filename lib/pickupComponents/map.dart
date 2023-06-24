@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,14 +19,34 @@ class _MapScreenState extends State<MapScreen> {
   static const _initialCameraPosition = CameraPosition(
       target: LatLng(14.40623697884286, 120.97523666918278), zoom: 11.5);
   Map<PolylineId, Polyline> polylines = {};
+  late Uint8List myLocIcon;
 
   @override
   void initState() {
+    addCustomIcon();
     getCurrentLocation();
     super.initState();
   }
 
   late GoogleMapController _mapController;
+
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  addCustomIcon() async {
+    var marker = await getBytesFromAsset('assets/loc.png', 100);
+    setState(() {
+      myLocIcon = marker;
+    });
+  }
+
   getCurrentLocation() async {
     try {
       Position position = await Geolocator.getCurrentPosition(
@@ -37,6 +60,7 @@ class _MapScreenState extends State<MapScreen> {
         Marker(
             markerId: MarkerId("markerId"),
             position: LatLng(latitude, longitude),
+            icon: BitmapDescriptor.fromBytes(myLocIcon),
             infoWindow: const InfoWindow(title: "My Location")),
       );
 

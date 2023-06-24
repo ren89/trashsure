@@ -14,6 +14,7 @@ import 'package:trashsure/my_header_drawer.dart';
 import 'package:trashsure/sellRequestComponents/locationPicker.dart';
 import 'package:intl/intl.dart';
 import 'package:trashsure/sellerHomeComponents/nearestJunkShops.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'main_test.dart';
 
@@ -39,7 +40,7 @@ class _HomeState extends State<Home> {
               children: [
                 Expanded(
                     child: MaterialButton(
-                  color: Colors.deepPurple[200],
+                  color: Color(0xff45b5a8),
                   onPressed: () {
                     showModalBottomSheet(
                         isScrollControlled: true,
@@ -117,51 +118,51 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
         padding: EdgeInsets.all(16),
         child: Column(children: [
           Row(
-            children: [
+            children: const [
               Text(
                 "Sell in Marketplace",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          SizedBox(
-            height: 12,
-          ),
-          Row(
-            children: [
-              Expanded(
-                  child: MaterialButton(
-                color: Colors.deepPurple[200],
-                onPressed: () async {
-                  ImagePicker picker = ImagePicker();
-                  List<XFile>? pickedFiles = await picker.pickMultiImage();
-                  setState(() {
-                    pickedImages = pickedFiles;
-                  });
-                },
-                padding: EdgeInsets.symmetric(vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add_a_photo,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    Text(
-                      "Add Photos",
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
-              ))
-            ],
-          ),
-          SizedBox(
-            height: 12,
-          ),
+          // SizedBox(
+          //   height: 12,
+          // ),
+          // Row(
+          //   children: [
+          //     Expanded(
+          //         child: MaterialButton(
+          //       color: Colors.deepPurple[200],
+          //       onPressed: () async {
+          //         ImagePicker picker = ImagePicker();
+          //         List<XFile>? pickedFiles = await picker.pickMultiImage();
+          //         setState(() {
+          //           pickedImages = pickedFiles;
+          //         });
+          //       },
+          //       padding: EdgeInsets.symmetric(vertical: 12),
+          //       child: Row(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Icon(
+          //             Icons.add_a_photo,
+          //             color: Colors.white,
+          //           ),
+          //           SizedBox(
+          //             width: 8,
+          //           ),
+          //           Text(
+          //             "Add Photos",
+          //             style: TextStyle(color: Colors.white),
+          //           )
+          //         ],
+          //       ),
+          //     ))
+          //   ],
+          // ),
+          // SizedBox(
+          //   height: 12,
+          // ),
           if (pickedImages != null) ...[
             Expanded(
               child: GridView.builder(
@@ -179,7 +180,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
             )
           ],
           SizedBox(
-            height: 24,
+            height: 18,
           ),
           Card(
             elevation: 4,
@@ -189,7 +190,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                     items = value;
                   });
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   contentPadding:
                       EdgeInsets.only(top: 16), // add padding to adjust text
                   isDense: true,
@@ -201,6 +202,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                   ),
                 )),
           ),
+          const SizedBox(height: 8),
           Card(
             elevation: 4,
             child: TextField(
@@ -210,7 +212,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                   });
                 },
                 keyboardType: TextInputType.number,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   contentPadding:
                       EdgeInsets.only(top: 16), // add padding to adjust text
                   isDense: true,
@@ -222,6 +224,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                   ),
                 )),
           ),
+          const SizedBox(height: 8),
           Card(
             elevation: 4,
             child: TextField(
@@ -230,7 +233,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                     description = value;
                   });
                 },
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   contentPadding:
                       EdgeInsets.only(top: 16), // add padding to adjust text
                   isDense: true,
@@ -242,6 +245,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                   ),
                 )),
           ),
+          const SizedBox(height: 8),
           Card(
             elevation: 4,
             child: TextField(
@@ -261,12 +265,9 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                   ),
                 )),
           ),
-          Expanded(
-            child: SizedBox(
-              height: 1,
-            ),
-          ),
+          const SizedBox(height: 40),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               MaterialButton(
                 onPressed: () {
@@ -278,14 +279,11 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                   });
                   Navigator.pop(context);
                 },
-                child: Text(
+                color: Color(0xff45b5a8),
+                child: const Text(
                   "Cancel",
                   style: TextStyle(color: Colors.white),
                 ),
-                color: Colors.deepPurple[200],
-              ),
-              Expanded(
-                child: SizedBox(),
               ),
               MaterialButton(
                 onPressed: () async {
@@ -320,8 +318,8 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
 
                     // set up the AlertDialog
                     AlertDialog alert = AlertDialog(
-                      title: Text("Missing Fields"),
-                      content: Text(
+                      title: const Text("Missing Fields"),
+                      content: const Text(
                           "You are missing some information in your listing. Please try again."),
                       actions: [
                         okButton,
@@ -337,11 +335,11 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                     );
                   }
                 },
-                child: Text(
+                color: const Color(0xff45b5a8),
+                child: const Text(
                   "Confirm",
                   style: TextStyle(color: Colors.white),
                 ),
-                color: Colors.deepPurple[200],
               )
             ],
           )
@@ -523,6 +521,7 @@ class _JunkshopWidgetState extends State<JunkshopWidget> {
       setState(() {
         data = value.data();
       });
+      print(data);
     });
   }
 
@@ -585,14 +584,19 @@ class _JunkshopWidgetState extends State<JunkshopWidget> {
               child: ListView(
             children: [
               if (data != null) ...[
-                Image.network(
-                  width: MediaQuery.of(context).size.width,
-                  height: 240,
-                  "https://picsum.photos/720",
-                  fit: BoxFit.cover,
+                //Change image size
+                CachedNetworkImage(
+                  height: 250,
+                  width: 250,
+                  imageUrl:
+                      "https://firebasestorage.googleapis.com/v0/b/trashsureee-4106e.appspot.com/o/junkshops%2F${data!['owner']}.jpg?alt=media&token=4136e890-f05c-4437-a635-a9816390406b",
+                  placeholder: (context, url) =>
+                      const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top: 12, left: 12, right: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
                   child: Text(
                     data!['name'],
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 36),
@@ -608,18 +612,18 @@ class _JunkshopWidgetState extends State<JunkshopWidget> {
                   child: Row(
                     children: [
                       Text(
+                        "${openingHour}:${(data!['opening'] as String).split(':')[1]} to ${closingHour}:${(data!['closing'] as String).split(':')[1]}",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      const SizedBox(
+                        width: 16,
+                      ),
+                      Text(
                         isOpen ? "Open now" : "Closed",
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: isOpen ? Colors.green : Colors.red),
-                      ),
-                      SizedBox(
-                        width: 16,
-                      ),
-                      Text(
-                        "${openingHour}:${(data!['opening'] as String).split(':')[1]} to ${closingHour}:${(data!['closing'] as String).split(':')[1]}",
-                        style: TextStyle(fontSize: 20),
                       ),
                     ],
                   ),
@@ -729,6 +733,10 @@ class _JunkshopWidgetState extends State<JunkshopWidget> {
                 children: [
                   Expanded(
                       child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                Color(0xff45b5a8)),
+                          ),
                           onPressed: () {
                             showModalBottomSheet(
                                 isScrollControlled: true,
@@ -823,6 +831,31 @@ class _ItemQuantitySelectorState extends State<ItemQuantitySelector> {
             Row(
               children: [
                 ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(0xff45b5a8)),
+                  ),
+                  onPressed: () {
+                    if (quantity > 0) {
+                      setState(() {
+                        quantity--;
+                      });
+                    }
+                  },
+                  child: Icon(Icons.remove),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    quantity.toString(),
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        const Color(0xff45b5a8)),
+                  ),
                   onPressed: () {
                     setState(() {
                       quantity++;
@@ -831,36 +864,24 @@ class _ItemQuantitySelectorState extends State<ItemQuantitySelector> {
                   child: Icon(Icons.add),
                 ),
                 SizedBox(
-                  width: 16,
-                ),
-                Text(
-                  quantity.toString(),
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  width: 16,
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (quantity > 0)
-                      setState(() {
-                        quantity--;
-                      });
-                  },
-                  child: Icon(Icons.remove),
-                ),
-                SizedBox(
                   width: 32,
                 ),
                 Expanded(
                   child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                          const Color(0xff45b5a8)),
+                    ),
                     onPressed: () {
                       Navigator.pop(
                           context,
                           Item(widget.name, quantity * widget.price,
                               widget.price, quantity));
                     },
-                    child: Text('Add to Sell Request'),
+                    child: const Text(
+                      'Add',
+                      style: TextStyle(fontSize: 18),
+                    ),
                   ),
                 ),
               ],
@@ -922,9 +943,25 @@ class _SellRequestsState extends State<SellRequests> {
 
   Future<String> getNumber(String userId) async {
     dynamic user = await getUserById(userId);
-    print("test");
-    print(user!['phone']);
     return user!['phone'];
+  }
+
+  getBuyer() async {
+    var doc = await FirebaseFirestore.instance
+        .collection('junkshops')
+        .doc(widget.junkshop_id)
+        .get();
+    var sellerId = (doc.data() as Map)['owner'];
+    return sellerId;
+  }
+
+  writeNotification() async {
+    FirebaseFirestore.instance.collection("notification").add({
+      "user_id": await getBuyer(),
+      "content":
+          'You have a sell request you can pick up from ${DateFormat('MMM d yyyy').format(startDate!)} - ${DateFormat('MMM d yyyy').format(endDate!)}',
+      "isRead": false
+    });
   }
 
   @override
@@ -1004,38 +1041,40 @@ class _SellRequestsState extends State<SellRequests> {
               "Provide a photo of the items you want to sell:",
             ),
           ),
-          Row(
-            children: [
-              if (pickedFile == null) ...[
-                Expanded(
-                    child: ElevatedButton(
-                  child: Text("Select a photo"),
-                  onPressed: () async {
-                    final ImagePicker picker = ImagePicker();
-                    final XFile? image =
-                        await picker.pickImage(source: ImageSource.gallery);
-                    setState(() {
-                      pickedFile = image;
-                    });
-                  },
-                ))
-              ] else ...[
-                Expanded(
-                    child: ElevatedButton(
-                  child: Text("Replace photo"),
-                  onPressed: () async {
-                    final ImagePicker picker = ImagePicker();
-                    final XFile? image =
-                        await picker.pickImage(source: ImageSource.gallery);
-                    setState(() {
-                      pickedFile = image;
-                    });
-                  },
-                ))
-              ]
-            ],
-          ),
-          Align(
+          if (pickedFile == null) ...[
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Color(0xff45b5a8)),
+              ),
+              child: Text("Select a photo"),
+              onPressed: () async {
+                final ImagePicker picker = ImagePicker();
+                final XFile? image =
+                    await picker.pickImage(source: ImageSource.gallery);
+                setState(() {
+                  pickedFile = image;
+                });
+              },
+            )
+          ] else ...[
+            ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(const Color(
+                    0xff45b5a8)), // Set the desired background color
+              ),
+              child: const Text("Replace photo"),
+              onPressed: () async {
+                final ImagePicker picker = ImagePicker();
+                final XFile? image =
+                    await picker.pickImage(source: ImageSource.gallery);
+                setState(() {
+                  pickedFile = image;
+                });
+              },
+            )
+          ],
+          const Align(
             alignment: Alignment.centerLeft,
             child: Text(
               "Select a range date for pick up:",
@@ -1043,6 +1082,10 @@ class _SellRequestsState extends State<SellRequests> {
           ),
           if (startDate != null) Text(startDateString!),
           ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateProperty.all<Color>(const Color(0xff45b5a8)),
+            ),
             child: const Text("Select start date"),
             onPressed: () async {
               final DateTime? datePicked = await showDatePicker(
@@ -1061,11 +1104,9 @@ class _SellRequestsState extends State<SellRequests> {
           if (endDate != null) Text(endDateString!),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: startDate != null
-                  ? Colors.blue
-                  : Colors.grey, // Set the desired background color
+              primary:
+                  startDate != null ? const Color(0xff45b5a8) : Colors.grey,
             ),
-            child: const Text("Select end date"),
             onPressed: startDate != null
                 ? () async {
                     final DateTime? datePicked = await showDatePicker(
@@ -1082,6 +1123,7 @@ class _SellRequestsState extends State<SellRequests> {
                     }
                   }
                 : null,
+            child: const Text("Select end date"),
           ),
           Align(
             alignment: Alignment.centerLeft,
@@ -1091,6 +1133,10 @@ class _SellRequestsState extends State<SellRequests> {
           ),
           if (pin != null) Text(pin.toString()),
           ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(const Color(0xff45b5a8)),
+              ),
               onPressed: () async {
                 LatLng temp = await showModalBottomSheet(
                     context: context,
@@ -1112,7 +1158,7 @@ class _SellRequestsState extends State<SellRequests> {
                             startDate != null &&
                             endDate != null &&
                             pin != null)
-                        ? Colors.blue
+                        ? const Color(0xff45b5a8)
                         : Colors.grey),
                 onPressed: () async {
                   if (pickedFile != null &&
@@ -1146,8 +1192,28 @@ class _SellRequestsState extends State<SellRequests> {
                       await FirebaseStorage.instance
                           .ref(value.id)
                           .putFile(File(pickedFile!.path));
+                      await showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Important Notice'),
+                            content: const Text(
+                              'Please be aware that the price displayed is an estimated value and subject to change based on the actual weight and other relevant factors. The final price will be determined during the evaluation process. Thank you for your understanding.',
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: const Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                       Navigator.pop(context);
                     });
+                    await writeNotification();
                   } else {
                     showModalBottomSheet(
                         context: context,

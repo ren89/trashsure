@@ -86,7 +86,7 @@ class _MyStoreState extends State<MyStore> {
     return Scaffold(
         appBar: AppBar(
           title: Text('My Shops'),
-          backgroundColor: Colors.green[700],
+          backgroundColor: Color(0xff45b5a8),
         ),
         body: Column(
           children: [
@@ -562,12 +562,16 @@ class _PinLocationModalState extends State<PinLocationModal> {
                   ])),
             ),
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(const Color(
+                    0xff45b5a8)), // Set the desired background color
+              ),
               onPressed: () {
                 Navigator.pop(context, _selectedLocation);
               },
-              child: Text('Pin Location'),
+              child: const Text('Pin Location'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
           ],
         ),
       ),

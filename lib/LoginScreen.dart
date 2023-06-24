@@ -135,6 +135,33 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintStyle: TextStyle(color: Colors.black38)),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return ForgotPasswordPage();
+                          },
+                        ),
+                      );
+                    },
+                    // padding: EdgeInsets.only(right:0),
+                    child: Text(
+                      'Forgot Passsword?',
+                      style: TextStyle(
+                          color: Color(0xff45b5a8),
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Container(
                 padding: EdgeInsets.symmetric(vertical: 25),
                 width: double.infinity,
@@ -147,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: Colors.deepPurple,
+                      color: Color(0xff45b5a8),
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Center(
@@ -161,24 +188,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 )),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return ForgotPasswordPage();
-                    },
-                  ),
-                );
-              },
-              // padding: EdgeInsets.only(right:0),
-              child: Text(
-                'Forgot Passsword?',
-                style:
-                    TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-              ),
-            )
           ]),
     );
   }
@@ -187,20 +196,16 @@ class _LoginScreenState extends State<LoginScreen> {
     return GestureDetector(
         onTap: widget.showRegisterPage,
         child: RichText(
-          text: TextSpan(
+          text: const TextSpan(
             children: [
               TextSpan(
                   text: 'Don\'t have an account yet? ',
                   style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500)),
+                      color: Colors.black87, fontWeight: FontWeight.w500)),
               TextSpan(
                   text: 'Register now',
                   style: TextStyle(
-                      color: Colors.blue,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold)),
+                      color: Color(0xff45b5a8), fontWeight: FontWeight.bold)),
             ],
           ),
         ));
@@ -231,13 +236,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 25, vertical: 120),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    Icon(
+                    const Icon(
                       Icons.recycling_outlined,
                       size: 60,
                       color: Colors.lightGreen,
                     ),
-                    Text(
+                    const Text(
                       'TrashSure',
                       style: TextStyle(
                         color: Colors.black38,
@@ -245,12 +251,15 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      'A mobile-based C2B application that implements an online recyclable waste marketplace utilizing a recommender algorithm',
-                      style: TextStyle(
-                        color: Colors.black38,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+                    const Center(
+                      child: Text(
+                        'A mobile-based C2B application that implements an online recyclable waste marketplace utilizing a recommender algorithm',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black38,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                     SizedBox(height: 50),

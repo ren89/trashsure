@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trashsure/junkShopComponents/requestList.dart';
 import 'package:trashsure/my_header_drawer.dart';
+import 'package:trashsure/notification_page.dart';
 
 class JunkshopHome extends StatefulWidget {
   const JunkshopHome({super.key});
@@ -10,6 +13,30 @@ class JunkshopHome extends StatefulWidget {
 }
 
 class _JunkshopHomeState extends State<JunkshopHome> {
+  int notificationCount = 0;
+  getNotifCount() async {
+    var query = FirebaseFirestore.instance
+        .collection('notification')
+        .where('user_id', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .where('isRead', isEqualTo: false);
+
+    await query.get().then((QuerySnapshot snapshot) {
+      int count = snapshot.size;
+
+      setState(() {
+        notificationCount = count;
+      });
+    }).catchError((error) {
+      print('Error retrieving data: $error');
+    });
+  }
+
+  @override
+  void initState() {
+    getNotifCount();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -17,7 +44,22 @@ class _JunkshopHomeState extends State<JunkshopHome> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Requests"),
-          backgroundColor: Colors.green[700],
+          backgroundColor: Color(0xff45b5a8),
+          actions: [
+            IconButton(
+              icon: Badge(
+                label: Text(notificationCount.toString()),
+                child: const Icon(Icons.notifications),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                );
+                // _showTopItemsDialog();
+              },
+            ),
+          ],
           bottom: const TabBar(
             tabs: [
               Tab(text: 'Pending'),
