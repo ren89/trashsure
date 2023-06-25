@@ -287,7 +287,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
               ),
               MaterialButton(
                 onPressed: () async {
-                  if (items != null && weight != null && pickedImages != null) {
+                  if (items != null && weight != null) {
                     FirebaseFirestore.instance.collection("marketplace").add({
                       "items": items,
                       "weight": weight,
@@ -302,9 +302,9 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                       "price": price,
                       "seller_id": FirebaseAuth.instance.currentUser!.uid,
                     }).then((value) {
+                      Navigator.pop(context);
                       if (pickedImages != null && pickedImages!.isNotEmpty) {
-                        _uploadImages(value.id)
-                            .then((value) => {Navigator.pop(context)});
+                        _uploadImages(value.id).then((value) => {});
                       }
                     });
                   } else {
@@ -1154,17 +1154,12 @@ class _SellRequestsState extends State<SellRequests> {
               Expanded(
                   child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: (pickedFile != null &&
-                            startDate != null &&
-                            endDate != null &&
-                            pin != null)
-                        ? const Color(0xff45b5a8)
-                        : Colors.grey),
+                    primary:
+                        (startDate != null && endDate != null && pin != null)
+                            ? const Color(0xff45b5a8)
+                            : Colors.grey),
                 onPressed: () async {
-                  if (pickedFile != null &&
-                      startDate != null &&
-                      endDate != null &&
-                      pin != null) {
+                  if (startDate != null && endDate != null && pin != null) {
                     List<Map<String, dynamic>> items = [];
                     widget.items.forEach((element) {
                       items.add({
@@ -1189,9 +1184,6 @@ class _SellRequestsState extends State<SellRequests> {
                       "phone": await getNumber(
                           FirebaseAuth.instance.currentUser!.uid),
                     }).then((value) async {
-                      await FirebaseStorage.instance
-                          .ref(value.id)
-                          .putFile(File(pickedFile!.path));
                       await showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -1212,6 +1204,9 @@ class _SellRequestsState extends State<SellRequests> {
                         },
                       );
                       Navigator.pop(context);
+                      FirebaseStorage.instance
+                          .ref(value.id)
+                          .putFile(File(pickedFile!.path));
                     });
                     await writeNotification();
                   } else {
