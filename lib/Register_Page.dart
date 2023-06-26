@@ -29,15 +29,17 @@ class _RegisterPageState extends State<RegisterPage> {
     bool email_verified = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(_emailController.text);
-    String pattern =
-        r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$';
-    RegExp regExp = new RegExp(pattern);
-    errors = regExp.hasMatch(_passwordController.text);
+    final RegExp passwordRegex =
+        RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$");
+    errors = passwordRegex.hasMatch(_passwordController.text);
+    print("ERROR" + errors.toString());
+
+    print("working" + passwordConfirmed().toString());
 
     if (email_verified == false) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("You did not supply a proper email address.")));
-    } else if (passwordConfirmed() && errors == false) {
+    } else if (passwordConfirmed() && errors == true) {
       await FirebaseAuth.instance
           .createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
@@ -52,7 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   "phone": _confirmphoneNumberController.text
                 }).then((value) => Navigator.pop(context))
               });
-    } else if (errors == true && passwordConfirmed() == false) {
+    } else if (errors == false && passwordConfirmed() == false) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
               "Your password must be more than 8 characters long and have one uppercase and lowercase letter, a number, and a special character. Your password also does not match confirm password. Please try again.")));
@@ -169,7 +171,7 @@ class _RegisterPageState extends State<RegisterPage> {
           return null;
         },
         controller: _passwordController,
-        obscureText: true,
+        obscureText: false,
         style: TextStyle(color: Colors.black87),
         decoration: InputDecoration(
             errorMaxLines: 4,
@@ -201,7 +203,7 @@ class _RegisterPageState extends State<RegisterPage> {
           return 'Does not match your password.';
         },
         controller: _confirmpasswordController,
-        obscureText: true,
+        obscureText: false,
         style: TextStyle(color: Colors.black87),
         decoration: InputDecoration(
             border: InputBorder.none,
