@@ -7,6 +7,7 @@ import 'package:trashsure/User.dart';
 import 'package:trashsure/buy_request.dart';
 import 'package:trashsure/history_page.dart';
 import 'package:trashsure/market_place.dart';
+import 'package:trashsure/my_item_page.dart';
 import 'package:trashsure/pickup_page.dart';
 import 'package:trashsure/profile.dart';
 import 'package:trashsure/sell_request.dart';
@@ -114,8 +115,8 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
           },
         ),
         ListTile(
-          title: Row(
-            children: const [
+          title: const Row(
+            children: [
               Icon(Icons.account_box_outlined),
               SizedBox(
                 width: 24,
@@ -135,6 +136,31 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
             );
           },
         ),
+        role
+            ? const SizedBox()
+            : ListTile(
+                title: const Row(
+                  children: [
+                    Icon(Icons.apps_rounded),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    Text(
+                      'My Items',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )
+                  ],
+                ),
+                onTap: () {
+                  // Update the state of the app.
+                  // ...
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyItemPage()),
+                  );
+                },
+              ),
         ListTile(
           title: Row(
             children: const [
@@ -178,26 +204,30 @@ class _MyHeaderDrawerState extends State<MyHeaderDrawer> {
                   );
                 },
               ),
-        ListTile(
-          title: Row(
-            children: const [
-              Icon(Icons.history),
-              SizedBox(
-                width: 24,
-              ),
-              Text(
-                'History',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        !role
+            ? ListTile(
+                title: const Row(
+                  children: [
+                    Icon(Icons.history),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    Text(
+                      'History',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )
+                  ],
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const HistoryPage()),
+                  );
+                },
               )
-            ],
-          ),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HistoryPage()),
-            );
-          },
-        ),
+            : const SizedBox(),
         !role
             ? SizedBox()
             : ListTile(

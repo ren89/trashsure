@@ -182,12 +182,16 @@ class _NavigationPageState extends State<NavigationPage> {
                                                               .data()
                                                           as Map)['picked_date']
                                                       .toDate())),
+                                              Text(
+                                                  "${(e.data() as Map)['phone'] ?? ''}"),
+                                              Text(
+                                                  "by ${(e.data() as Map)['seller_name'] ?? ''}"),
                                             ],
                                           ),
                                           const Expanded(
                                               child: SizedBox.shrink()),
                                           Text(
-                                            "P${(totalPrice(e) + (e.data() as Map)['fare']).toStringAsFixed(2)}",
+                                            "P${(e.data() as Map)['total'].toStringAsFixed(2)}",
                                             style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold),

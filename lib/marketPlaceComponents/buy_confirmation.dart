@@ -48,8 +48,8 @@ class BuyItemModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Buy Item'),
-      content: Text('Are you sure you want to buy $itemName?'),
+      title: const Text('Sell Item'),
+      content: Text('Mark $itemName as sold?'),
       actions: [
         TextButton(
           child: const Text('No'),

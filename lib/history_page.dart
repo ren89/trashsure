@@ -80,6 +80,9 @@ class _HistoryPageState extends State<HistoryPage> {
               price: history[index]['price'],
               weight: history[index]['weight'],
               phone: history[index]['phone'],
+              sellerName: history[index]['seller_name'],
+              quantityType: history[index]['quantity_type'],
+              image: history[index]['image'],
             );
           }),
     );

@@ -75,19 +75,21 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
   List<XFile>? pickedImages;
   int? weight;
   double? price;
-  String? items, description;
+  String? items, description, quantityType;
   DateTime selectedDate = DateTime.now();
   TextEditingController _date = TextEditingController();
 
-  Future<void> _uploadImages(String id) async {
-    for (int i = 0; i < pickedImages!.length; i++) {
-      File file = File(pickedImages![i].path);
+  Future<String> uploadImageToFirebase(File image) async {
+    String fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
-      Reference storageReference = FirebaseStorage.instance.ref().child(
-          '${id}/${pickedImages![i].name}'); // Replace 'your_folder_name' with your desired folder in Firebase Storage
+    Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
 
-      await storageReference.putFile(file);
-    }
+    UploadTask uploadTask = storageReference.putFile(image);
+
+    TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => {});
+    String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+    return downloadUrl;
   }
 
   Future<dynamic> getUserById(String userId) async {
@@ -108,79 +110,78 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
     return user!['address'];
   }
 
+  Future<String> getName(String userId) async {
+    dynamic user = await getUserById(userId);
+    return user!['name'];
+  }
+
   Widget build(BuildContext context) {
     double mWidth = MediaQuery.of(context).size.width;
     double mHeight = MediaQuery.of(context).size.height;
     return Container(
       width: mWidth,
-      height: mHeight * 0.8,
+      height: mHeight * 0.9,
       child: Padding(
         padding: EdgeInsets.all(16),
         child: Column(children: [
-          Row(
-            children: const [
+          const Row(
+            children: [
               Text(
                 "Sell in Marketplace",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
           ),
-          // SizedBox(
-          //   height: 12,
-          // ),
-          // Row(
-          //   children: [
-          //     Expanded(
-          //         child: MaterialButton(
-          //       color: Colors.deepPurple[200],
-          //       onPressed: () async {
-          //         ImagePicker picker = ImagePicker();
-          //         List<XFile>? pickedFiles = await picker.pickMultiImage();
-          //         setState(() {
-          //           pickedImages = pickedFiles;
-          //         });
-          //       },
-          //       padding: EdgeInsets.symmetric(vertical: 12),
-          //       child: Row(
-          //         mainAxisAlignment: MainAxisAlignment.center,
-          //         children: [
-          //           Icon(
-          //             Icons.add_a_photo,
-          //             color: Colors.white,
-          //           ),
-          //           SizedBox(
-          //             width: 8,
-          //           ),
-          //           Text(
-          //             "Add Photos",
-          //             style: TextStyle(color: Colors.white),
-          //           )
-          //         ],
-          //       ),
-          //     ))
-          //   ],
-          // ),
-          // SizedBox(
-          //   height: 12,
-          // ),
-          if (pickedImages != null) ...[
-            Expanded(
-              child: GridView.builder(
-                itemCount: pickedImages!.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                ),
-                itemBuilder: (BuildContext context, int index) {
-                  return Image.file(
-                    File(pickedImages![index].path),
-                    fit: BoxFit.cover,
-                  );
+          const SizedBox(
+            height: 12,
+          ),
+          Row(
+            children: [
+              Expanded(
+                  child: MaterialButton(
+                color: Colors.deepPurple[200],
+                onPressed: () async {
+                  ImagePicker picker = ImagePicker();
+                  List<XFile>? pickedFiles = await picker.pickMultiImage();
+                  setState(() {
+                    pickedImages = pickedFiles;
+                  });
                 },
+                padding: EdgeInsets.symmetric(vertical: 12),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.add_a_photo,
+                      color: Colors.white,
+                    ),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text(
+                      "Add Photos",
+                      style: TextStyle(color: Colors.white),
+                    )
+                  ],
+                ),
+              ))
+            ],
+          ),
+          SizedBox(
+            height: 12,
+          ),
+          if (pickedImages != null) ...[
+            Center(
+              child: Image.file(
+                File(pickedImages![0].path),
+                width: 150,
+                height: 150,
+                fit: BoxFit.scaleDown,
               ),
             )
           ],
           SizedBox(
-            height: 18,
+            height: 12,
           ),
           Card(
             elevation: 4,
@@ -216,13 +217,41 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                   contentPadding:
                       EdgeInsets.only(top: 16), // add padding to adjust text
                   isDense: true,
-                  hintText: "Weight of Items in KG",
+                  hintText: "Quantity",
                   prefixIcon: Padding(
                     padding:
                         EdgeInsets.only(top: 4), // add padding to adjust icon
                     child: Icon(Icons.monitor_weight),
                   ),
                 )),
+          ),
+          const SizedBox(height: 8),
+          Card(
+            child: DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                labelText: 'Quantity Type',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.only(top: 4),
+                  child: Icon(Icons.monitor_weight),
+                ),
+              ),
+              value: quantityType,
+              items: const [
+                DropdownMenuItem(
+                  value: 'kg',
+                  child: Text('kg'),
+                ),
+                DropdownMenuItem(
+                  value: 'pc/pcs',
+                  child: Text('pc/pcs'),
+                ),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  quantityType = value;
+                });
+              },
+            ),
           ),
           const SizedBox(height: 8),
           Card(
@@ -265,7 +294,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                   ),
                 )),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -291,6 +320,7 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                     FirebaseFirestore.instance.collection("marketplace").add({
                       "items": items,
                       "weight": weight,
+                      "quantity_type": quantityType,
                       "description": description,
                       "owner_id": FirebaseAuth.instance.currentUser?.uid,
                       "buyer_id": null,
@@ -301,11 +331,12 @@ class _BottomPopUpModalState extends State<BottomPopUpModal> {
                           FirebaseAuth.instance.currentUser!.uid),
                       "price": price,
                       "seller_id": FirebaseAuth.instance.currentUser!.uid,
+                      "seller_name":
+                          await getName(FirebaseAuth.instance.currentUser!.uid),
+                      "image": await uploadImageToFirebase(
+                          File(pickedImages![0].path))
                     }).then((value) {
                       Navigator.pop(context);
-                      if (pickedImages != null && pickedImages!.isNotEmpty) {
-                        _uploadImages(value.id).then((value) => {});
-                      }
                     });
                   } else {
                     // set up the button
@@ -946,6 +977,11 @@ class _SellRequestsState extends State<SellRequests> {
     return user!['phone'];
   }
 
+  Future<String> getName(String userId) async {
+    dynamic user = await getUserById(userId);
+    return user!['name'];
+  }
+
   getBuyer() async {
     var doc = await FirebaseFirestore.instance
         .collection('junkshops')
@@ -1183,6 +1219,8 @@ class _SellRequestsState extends State<SellRequests> {
                       "pickup_location": [pin?.latitude, pin?.longitude],
                       "phone": await getNumber(
                           FirebaseAuth.instance.currentUser!.uid),
+                      "seller_name":
+                          await getName(FirebaseAuth.instance.currentUser!.uid),
                     }).then((value) async {
                       await showDialog(
                         context: context,

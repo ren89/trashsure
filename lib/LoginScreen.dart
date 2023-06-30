@@ -177,7 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       color: Color(0xff45b5a8),
                       borderRadius: BorderRadius.circular(15),
                     ),
-                    child: Center(
+                    child: const Center(
                       child: Text(
                         'Sign In',
                         style: TextStyle(

@@ -129,22 +129,22 @@ class _MarketPlacePageState extends State<MarketPlacePage> {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 return InkWell(
-                  onTap: !role
-                      ? () {
-                          print("Test");
-                        }
-                      : () async {
-                          final result = await showDialog(
-                            context: context,
-                            builder: (context) => BuyItemModal(
-                              itemName: items[index]['items'],
-                              docId: items[index].id,
-                            ),
-                          );
-                          if (result == true) {
-                            getMarketPlace();
-                          }
-                        },
+                  // onTap: !role
+                  //     ? () {
+                  //         print("Test");
+                  //       }
+                  //     : () async {
+                  //         final result = await showDialog(
+                  //           context: context,
+                  //           builder: (context) => BuyItemModal(
+                  //             itemName: items[index]['items'],
+                  //             docId: items[index].id,
+                  //           ),
+                  //         );
+                  //         if (result == true) {
+                  //           getMarketPlace();
+                  //         }
+                  //       },
                   child: MarketCard(
                     item: items[index]['items'],
                     address: items[index]['address'],
@@ -152,6 +152,10 @@ class _MarketPlacePageState extends State<MarketPlacePage> {
                     price: items[index]['price'],
                     weight: items[index]['weight'],
                     phone: items[index]['phone'],
+                    id: items[index].id,
+                    sellerName: items[index]['seller_name'],
+                    quantityType: items[index]['quantity_type'],
+                    image: items[index]['image'],
                   ),
                 );
               }),
